@@ -223,7 +223,7 @@ a:hover {
 <script>
 $(document).ready(function(e) {
 
-	try { if(!phpdesktop.GetVersion()) window.location.assign('error'); } catch(err) { window.location.assign('error'); }
+	//try { if(!phpdesktop.GetVersion()) window.location.assign('error'); } catch(err) { window.location.assign('error'); }
 	window.onload = date_time("date_time");
     var view_width = $(window).width();
 	var view_top = $(window).scrollTop() + 200;
