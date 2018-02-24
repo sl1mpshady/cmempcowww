@@ -1,0 +1,138 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+/*position:fixed;*/
+width:100%;
+}
+td, th {
+  padding: 2px;
+}
+#total {
+  float: right;
+  font-size: 82px;
+  overflow: hidden;
+  font-family: -webkit-body;
+  color: #00cc00;
+}
+#list {
+  float: left;
+  width: 100%;
+  margin-top: -22px;
+  height: 340px;
+  -webkit-box-shadow: 0px 2px 21px -2px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0px 2px 21px -2px rgba(0,0,0,0.5);
+  box-shadow: 0px 2px 21px -2px rgba(0,0,0,0.5);
+  border-radius:4px;
+}
+#list #head {
+  background-image: linear-gradient(to bottom, #ffffff, lightgray 213%);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  color: navy;
+  font-weight: bold;
+  font-family: -webkit-body;
+  font-size: 15px;
+  font-weight: bold;
+  border-bottom: 1px solid lightgray;
+  font-size:18px;
+}
+#table_head td{
+  border-right:1px solid lightgray;
+  text-align:center
+}
+#list2 td:nth-child(1), #list2 td:nth-child(2) {
+  text-align:left;
+}
+#list2 td:nth-child(3), #list2 td:nth-child(4), #list2 td:nth-child(5), #list2 td:nth-child(6) {
+  text-align:right;
+}
+#list2 tr:nth-child(odd){
+  background: #fff;
+}
+#list2 tr:nth-child(even){
+  background: #DFDFDF;
+}
+#list2 td {
+  padding: 2px 4px;
+}
+input {
+  font-size:16px !important;
+}
+.form-control[disabled]{
+  background:transparent;
+  cursor:default;
+}
+
+.btn {
+  background-image: linear-gradient(to bottom, #ffffff, lightgray 213%);
+  border: 1px solid lightgray;
+  font-weight: bold;
+}
+.modal-dialog .btn {
+	padding: 6px 12px !important;
+	  background-image: linear-gradient(to bottom, #ffffff, lightgray 248%) !important;
+}
+.modal-dialog .btn:hover {
+  background-color: #ddd !important;
+  -webkit-transition: background-color 1s ease !important;
+  -moz-transition: background-color 1s ease !important;
+  transition: background-color 1s ease !important;
+}
+.modal-footer {
+  padding: 6px !important;
+}
+#lookup .btn, #customer_pop .btn,  {
+  font-size: 12px !important;
+  padding: 4px 6px !important;
+}
+.summary {
+  float:inherit;width:100%;line-height:25px
+}
+#buttons .btn {
+  float: left;
+  font-size: 16px;
+  padding: 3px 9px 3px 9px;
+  padding: 3px 7px 3px 7px;
+  margin-right: 3px;
+}
+#key{
+  width:100%;float:inherit;font-size:12px
+}
+#list2 {
+	cursor:default;
+}
+#list2 td:nth-child(1),#list2 td:nth-child(3),#list2 td:nth-child(5),#list2 td:nth-child(6){
+  width:10%;
+}
+
+#list2 td:nth-child(4){
+  width:10%;
+}
+.active_ {
+  background-image: url(media/svg_gradient.php?from=ced6df&to=b6c6d7) !important;
+  background-size: 100% 100% !important;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ced6df), to(#b6c6d7)) !important;
+  background: -webkit-linear-gradient(top, #ced6df, #b6c6d7) !important;
+  background: -moz-linear-gradient(top, #ced6df, #b6c6d7) !important;
+  background: -ms-linear-gradient(top, #ced6df, #b6c6d7) !important;
+  background: -o-linear-gradient(top, #ced6df, #b6c6d7) !important;
+  color: #000 !important;
+}
+#list2 tr:hover {
+  background-image: url(media/svg_gradient.php?from=ced6df&to=b6c6d7);
+  background-size: 100% 100%;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ced6df), to(#b6c6d7));
+  background: -webkit-linear-gradient(top, #ced6df, #b6c6d7);
+  background: -moz-linear-gradient(top, #ced6df, #b6c6d7);
+  background: -ms-linear-gradient(top, #ced6df, #b6c6d7);
+  background: -o-linear-gradient(top, #ced6df, #b6c6d7);
+  color: #000;
+}
+#search {
+  font-size: 14px !important;
+  text-align: left;
+  font-weight: 100;
+  width: 30%;
+  padding: 3px;
+}

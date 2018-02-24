@@ -1,0 +1,24 @@
+@charset "utf-8";
+/* CSS Document */
+#print {
+	width:100%;
+}
+@media print {
+	#body, #header {
+		display:none;
+	}
+	#print {
+		display:block !important;
+		width: 8.5in;
+        height: 11in;
+	}
+	.page-break	{ display: none; }
+	td:nth-child(1),td:nth-child(3){
+		width: 130px;
+  		text-align: right;
+	}
+	td:nth-child(2),td:nth-child(4){
+		text-align:left;
+	}
+}
+

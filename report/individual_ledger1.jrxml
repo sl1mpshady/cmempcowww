@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="individual_ledger1" language="groovy" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="db4b3703-036b-4597-a303-21747b1821c9">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="390"/>
+	<property name="ireport.y" value="172"/>
+	<parameter name="from" class="java.lang.String"/>
+	<parameter name="from1" class="java.lang.String"/>
+	<parameter name="to" class="java.lang.String"/>
+	<parameter name="to1" class="java.lang.String"/>
+	<parameter name="custID" class="java.lang.String"/>
+	<parameter name="verifier" class="java.lang.String"/>
+	<parameter name="custID1" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT *
+FROM
+(
+    (SELECT DATE_FORMAT(saleDateTime,'%m/%d/%y %h:%i %p') as date, saleDateTime as date1,CONCAT('Sales Order ',saleID) as subject, saleType as type,saleNetAmount as amount,customerBal as balance,getAccName(saleAssign) as account, DATE_FORMAT(NOW(),'%m/%d/%y %h:%i %p') as NOW, getCustName(saleCustomer) as Name FROM sales_order WHERE saleCustomer=$P{custID} AND DATEDIFF(saleDateTime, $P{from}) >= 0 AND DATEDIFF(saleDateTime,$P{to}) <= 0)
+    UNION ALL
+    (SELECT DATE_FORMAT(saleDateTime,'%m/%d/%y %h:%i %p') as date, saleDateTime as date1, CONCAT('Panel/SO ',saleID) as subject, saleType as type,saleNetAmount as amount,customerBal as balance,getAccName(saleAssign) as account, DATE_FORMAT(NOW(),'%m/%d/%y %h:%i %p') as NOW, getCustName(saleCustomer) as Name FROM sales_order WHERE saleCustomer=$P{custID} AND salePanel>0 AND DATEDIFF(saleDateTime, $P{from}) >= 0 AND DATEDIFF(saleDateTime,$P{to}) <= 0)
+    UNION ALL
+    (SELECT DATE_FORMAT(getgetDedDate(dedID),'%m/%d/%y %h:%i %p') as date, getgetDedDate(dedID) as date1, CONCAT('Deduction ',dedID) as subject,dedID as type,deduction as amount,netCredit as balance,getAccName(getgetDedAcc(dedID)) as account, DATE_FORMAT(NOW(),'%m/%d/%y %h:%i %p') as NOW, getCustName(custID) as Name FROM pd_customer_list WHERE custID=$P{custID} AND DATEDIFF(getgetDedDate(dedID), $P{from}) >= 0 AND DATEDIFF(getgetDedDate(dedID),$P{to}) <= 0)
+    UNION ALL
+    (SELECT DATE_FORMAT(retDateTime,'%m/%d/%y %h:%i %p') as date, retDateTime as date1 ,CONCAT('Return ',retID) as subject, retID as type, retCost as amount,'' as balance,getAccName(retAssign) as account, DATE_FORMAT(NOW(),'%m/%d/%y %h:%i %p') as NOW, getCustName(getSaleCustID(retSubject)) as Name FROM _return WHERE retType='SO' AND getSaleCustID(retSubject)=$P{custID} AND DATEDIFF(retDateTime, $P{from}) >= 0 AND DATEDIFF(retDateTime,$P{to}) <= 0)
+    UNION ALL
+    (SELECT DATE_FORMAT(getgetDedDate(dedID),'%m/%d/%y %h:%i %p') as date, getgetDedDate(dedID) as date1, CONCAT('Deduction ',dedID) as subject, dedID as type, deduction as amount,netCredit as balance, getAccName(getgetDedAcc(dedID)) as account, DATE_FORMAT(NOW(),'%m/%d/%y %h:%i %p') as NOW, getCustName(custID) as Name FROM pd_customer_list WHERE custID=$P{custID} AND DATEDIFF(getgetDedDate(dedID),$P{from})>=0 AND DATEDIFF(getgetDedDate(dedID),$P{to})<=0)
+    UNION ALL
+    (SELECT DATE_FORMAT(repDateTime,'%m/%d/%y %h:%i %p') as date, repDateTime as date1, CONCAT('Replacement of Return ',retID) as subject, retID as type, repCost as amount, NULL as balance, getAccName(repAssign) as account, DATE_FORMAT(NOW(),'%m/%d/%y %h:%i %p') as NOW, getCustName(custID) FROM replacement WHERE custID=$P{custID} AND DATEDIFF(repDateTime,$P{from})>=0 AND DATEDIFF(repDateTime,$P{to})<=0)
+    UNION ALL
+    (SELECT DATE_FORMAT(refDateTime,'%m/%d/%y %h:%i %p') as date, refDateTime as date1, CONCAT('Replacement of Return ',retID) as subject, retID as type, refCost as amount, NULL as balance, getAccName(refAssign) as account, DATE_FORMAT(NOW(),'%m/%d/%y %h:%i %p') as NOW, getCustName(custID) FROM refund WHERE custID=$P{custID} AND DATEDIFF(refDateTime,$P{from})>=0 AND DATEDIFF(refDateTime,$P{to})<=0)
+) TEMP
+ORDER BY date1 ASC;]]>
+	</queryString>
+	<field name="date" class="java.lang.String"/>
+	<field name="subject" class="java.lang.String"/>
+	<field name="type" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="amount" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="balance" class="java.lang.String"/>
+	<field name="account" class="java.lang.String"/>
+	<field name="NOW" class="java.lang.String"/>
+	<field name="Name" class="java.lang.String"/>
+	<variable name="variable1" class="java.lang.String" calculation="Count">
+		<variableExpression><![CDATA[$F{subject}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="112" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="20" width="572" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="6f31f22b-95ff-402a-aeb7-75a8ccd90306"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Cagdianao Mining Corporation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="572" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="7d229c21-cb54-43f3-9fb0-3d7d83e5779e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[CAGDIANAO MINING EMPLOYEES MULTI-PURPOSE COOPERATIVE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="55" width="572" height="24" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="8afed595-ee20-4780-a2b8-cb093f57c40b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font fontName="Monospaced" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[CUSTOMER LEDGER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="572" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="545d32a1-05f1-4a42-bb81-99b941db9b73"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Brgy. Valencia, Cagdianao, Dinagat Island]]></text>
+			</staticText>
+			<line>
+				<reportElement x="225" y="73" width="123" height="1" uuid="28ee41ae-8582-470c-ad03-337d83cce4e8"/>
+			</line>
+			<textField>
+				<reportElement x="309" y="74" width="38" height="11" uuid="40822ef3-8213-4392-8189-ea8853a53787"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{to1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="228" y="74" width="24" height="11" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="c8c03dc5-9cfa-491d-b2e7-473733747ac0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None">
+					<font fontName="Monospaced" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[FROM ]]></text>
+			</staticText>
+			<textField pattern="d/M/yyyy">
+				<reportElement x="252" y="74" width="38" height="11" uuid="7206225f-9bff-493c-80a9-9d6a789ec361"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Monospaced" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{from1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="85" width="70" height="13" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="ab38c0dd-615a-4eea-beaf-7225e3b5db02"/>
+				<textElement verticalAlignment="Middle" rotation="None">
+					<font fontName="Monospaced" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Customer ID:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="294" y="74" width="15" height="11" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="4ecac42d-0d4d-4031-8793-3695987627b7"/>
+				<textElement verticalAlignment="Middle" rotation="None">
+					<font fontName="Monospaced" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[TO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement isPrintRepeatedValues="false" x="70" y="85" width="98" height="13" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="7803017b-90a4-4a88-9051-a842ab28c7ca"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{custID1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="98" width="70" height="13" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="a10bc7b6-fb6c-45fc-9a07-d5ee1a6a4dcf"/>
+				<textElement verticalAlignment="Middle" rotation="None">
+					<font fontName="Monospaced" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Name:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="70" y="98" width="287" height="13" uuid="16b341cc-20bb-4e8d-94f2-6ae05a62cb45"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="381" y="0" width="191" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="5998722d-0509-4eff-87fd-2e5858d88cfd"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="1">
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9" isBold="true" isItalic="false" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[ASSIGN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="294" y="0" width="87" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="1134b195-b81c-4ef1-8eca-41cb8edd9a29"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="1">
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9" isBold="true" isItalic="false" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[BALANCE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="0" width="119" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="cf786273-8c22-4747-a7c8-f0f36272100b"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="1">
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9" isBold="true" isItalic="false" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[SUBJECT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="80" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="9591cee3-7c9c-498d-b4a7-fa149c661982"/>
+				<box topPadding="0" leftPadding="5" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[DATE & TIME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="199" y="0" width="95" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="cf2cc3bf-6309-4177-a681-3984b26168d0"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="1">
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9" isBold="true" isItalic="false" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[AMOUNT]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="80" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="cc0cc318-ee08-4524-be60-d01f944c8830"/>
+				<box leftPadding="5" rightPadding="5">
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="119" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="88cfcb86-4724-4f1a-a10f-f6bada015d0f"/>
+				<box leftPadding="5" rightPadding="5">
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subject}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="294" y="0" width="87" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="82836fcd-5c47-46c8-a440-9005ee346c13"/>
+				<box leftPadding="5" rightPadding="5">
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{balance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="381" y="0" width="191" height="14" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="3b96ff78-61f7-4c6a-9c4f-4cd6aabf1e64"/>
+				<box leftPadding="5" rightPadding="5">
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{account}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="199" y="1" width="95" height="13" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="b6b27373-e9b4-49b8-b69b-e1d5238d5660"/>
+				<box leftPadding="5" rightPadding="5">
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement x="466" y="6" width="77" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="3b0a5401-ae79-4037-8351-874230691689"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="543" y="6" width="29" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="0916be83-b5bf-419f-9236-d261e5183e94"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="26">
+			<textField>
+				<reportElement x="466" y="6" width="77" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="6857a355-cf3e-4865-b933-4eece0613856"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="89" y="6" width="97" height="20" uuid="8ba94c32-6d56-40ba-8764-9934c03924cd"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOW}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="6" width="89" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="1c1d0639-9c06-4553-8ec2-61b756d36344"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<text><![CDATA[Date & Time Printed:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="543" y="6" width="29" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="9d04ae6b-749b-44ed-be21-defbab136d4b"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="63" splitType="Stretch">
+			<textField pattern="#,##0">
+				<reportElement x="70" y="0" width="88" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="f47f802b-18c9-4c21-b177-1fc20e6eeb75"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{variable1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="381" y="43" width="191" height="20" uuid="b64a194b-36da-4bd4-82a6-49e4cc9a9eaf"/>
+				<box>
+					<topPen lineWidth="1.25"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<text><![CDATA[VERIFIED BY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="89" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="3bcd27de-c3b7-47af-8f41-c3d5a4429b49"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<text><![CDATA[Transactions:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="381" y="23" width="191" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="9c2c2756-98f7-4bff-9369-5bae056f8774"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Monospaced" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{verifier}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
